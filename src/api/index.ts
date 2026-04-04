@@ -1,4 +1,5 @@
 import { Hono } from "hono";
+import { fetchAllFeeds } from "./cron/fetch-feeds";
 import { auth } from "./middleware/auth";
 import { authRoutes } from "./routes/auth";
 import { feedRoutes } from "./routes/feeds";
@@ -28,9 +29,9 @@ export default {
 	fetch: app.fetch,
 	async scheduled(
 		_event: ScheduledEvent,
-		_env: Bindings,
+		env: Bindings,
 		ctx: ExecutionContext,
 	): Promise<void> {
-		ctx.waitUntil(Promise.resolve());
+		ctx.waitUntil(fetchAllFeeds(env));
 	},
 };

@@ -7,7 +7,7 @@
     "dev": "vite dev",
     "build": "vite build",
     "preview": "vite preview",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.test.json",
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
     "test": "vitest run",
@@ -15,6 +15,7 @@
     "db:migrate:local": "wrangler d1 migrations apply rss-reader-db --local"
   },
   "dependencies": {
+    "fast-xml-parser": "^5.5.9",
     "hono": "^4.12.9",
     "react": "^19.2.4",
     "react-dom": "^19.2.4"
@@ -23,6 +24,7 @@
     "@biomejs/biome": "^2.4.9",
     "@cloudflare/vite-plugin": "^1.30.2",
     "@cloudflare/workers-types": "^4.20260317.1",
+    "@types/node": "^25.5.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.1",
