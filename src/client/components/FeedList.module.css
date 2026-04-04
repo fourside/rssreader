@@ -6,9 +6,9 @@
 
 .allItem,
 .item {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto;
   align-items: center;
-  justify-content: space-between;
   padding: 10px 16px;
   cursor: pointer;
   font-size: var(--font-base);

@@ -1,7 +1,6 @@
 .empty {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: grid;
+  place-items: center;
   height: 100%;
   color: var(--color-text-secondary);
   font-size: var(--font-base);
