@@ -1,9 +1,11 @@
 import { Hono } from "hono";
 import { fetchAllFeeds } from "./cron/fetch-feeds";
 import { auth } from "./middleware/auth";
+import { aiRoutes } from "./routes/ai";
 import { authRoutes } from "./routes/auth";
 import { entryRoutes } from "./routes/entries";
 import { feedRoutes } from "./routes/feeds";
+import { searchRoutes } from "./routes/search";
 
 export type Bindings = {
   DB: D1Database;
@@ -26,6 +28,8 @@ app.use("/api/*", auth);
 
 app.route("/api/feeds", feedRoutes);
 app.route("/api/entries", entryRoutes);
+app.route("/api/ai/entries", aiRoutes);
+app.route("/api/search", searchRoutes);
 
 export default {
   fetch: app.fetch,

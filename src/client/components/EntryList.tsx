@@ -1,3 +1,4 @@
+import { type FormEvent, useEffect, useState } from "react";
 import type { EntryItem } from "../api";
 import styles from "./EntryList.module.css";
 
@@ -6,6 +7,8 @@ type Props = {
   selectedEntryId: string | null;
   onSelectEntry: (entryId: string) => void;
   feedTitle?: string | undefined;
+  searchQuery: string;
+  onSearch: (query: string) => void;
 };
 
 export function EntryList({
@@ -13,10 +16,32 @@ export function EntryList({
   selectedEntryId,
   onSelectEntry,
   feedTitle,
+  searchQuery,
+  onSearch,
 }: Props) {
+  const [input, setInput] = useState(searchQuery);
+
+  useEffect(() => {
+    setInput(searchQuery);
+  }, [searchQuery]);
+
+  function handleSubmit(e: FormEvent) {
+    e.preventDefault();
+    onSearch(input);
+  }
+
   return (
     <div>
       <div className={styles.header}>{feedTitle ?? "All Entries"}</div>
+      <form className={styles.searchForm} onSubmit={handleSubmit}>
+        <input
+          className={styles.searchInput}
+          type="search"
+          placeholder="Search..."
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+        />
+      </form>
       {entries.length === 0 ? (
         <p className={styles.empty}>No entries</p>
       ) : (

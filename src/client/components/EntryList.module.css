@@ -5,6 +5,25 @@
   font-weight: 600;
 }
 
+.searchForm {
+  padding: 8px 12px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 6px 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: #4a90d9;
+  box-shadow: 0 0 0 2px rgba(74, 144, 217, 0.2);
+}
+
 .list {
   list-style: none;
   margin: 0;

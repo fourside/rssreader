@@ -15,6 +15,7 @@ export function App() {
   const [selectedFeedId, setSelectedFeedId] = useState<string | null>(null);
   const [selectedEntryId, setSelectedEntryId] = useState<string | null>(null);
   const [entryDetail, setEntryDetail] = useState<EntryDetail | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     api.getFeeds().then((result) => {
@@ -32,10 +33,25 @@ export function App() {
 
   useEffect(() => {
     if (authState !== "authenticated") return;
+    if (searchQuery) return;
     loadEntries(selectedFeedId);
     setSelectedEntryId(null);
     setEntryDetail(null);
-  }, [authState, selectedFeedId, loadEntries]);
+  }, [authState, selectedFeedId, loadEntries, searchQuery]);
+
+  async function handleSearch(query: string) {
+    setSearchQuery(query);
+    if (!query.trim()) {
+      loadEntries(selectedFeedId);
+      return;
+    }
+    const result = await api.search(query);
+    if (result.ok) {
+      setEntries(result.data.entries);
+      setSelectedEntryId(null);
+      setEntryDetail(null);
+    }
+  }
 
   async function handleSelectEntry(entryId: string) {
     setSelectedEntryId(entryId);
@@ -88,7 +104,10 @@ export function App() {
         <FeedList
           feeds={feeds}
           selectedFeedId={selectedFeedId}
-          onSelectFeed={setSelectedFeedId}
+          onSelectFeed={(id) => {
+            setSelectedFeedId(id);
+            setSearchQuery("");
+          }}
         />
       }
       entryList={
@@ -96,11 +115,18 @@ export function App() {
           entries={entries}
           selectedEntryId={selectedEntryId}
           onSelectEntry={handleSelectEntry}
-          feedTitle={selectedFeed?.title ?? undefined}
+          feedTitle={
+            searchQuery
+              ? `Search: ${searchQuery}`
+              : (selectedFeed?.title ?? undefined)
+          }
+          searchQuery={searchQuery}
+          onSearch={handleSearch}
         />
       }
       entryView={
         <EntryView
+          key={entryDetail?.id}
           entry={entryDetail}
           onToggleRead={() => handleToggleField("is_read")}
           onToggleStar={() => handleToggleField("is_starred")}

@@ -69,6 +69,11 @@ const IdSchema = v.object({ id: v.string() });
 const FeedsSchema = v.object({ feeds: v.array(FeedSchema) });
 const EntriesSchema = v.object({ entries: v.array(EntryItemSchema) });
 const EntrySchema = v.object({ entry: EntryDetailSchema });
+const SummarySchema = v.object({ summary: v.string() });
+const TranslationSchema = v.object({
+  translation: v.string(),
+  lang: v.string(),
+});
 
 export const api = {
   login(email: string, password: string) {
@@ -122,5 +127,22 @@ export const api = {
       method: "PATCH",
       body: JSON.stringify(state),
     });
+  },
+
+  summarize(entryId: string) {
+    return request(`/api/ai/entries/${entryId}/summarize`, SummarySchema, {
+      method: "POST",
+    });
+  },
+
+  translate(entryId: string, lang = "ja") {
+    return request(`/api/ai/entries/${entryId}/translate`, TranslationSchema, {
+      method: "POST",
+      body: JSON.stringify({ lang }),
+    });
+  },
+
+  search(query: string) {
+    return request(`/api/search?q=${encodeURIComponent(query)}`, EntriesSchema);
   },
 };
