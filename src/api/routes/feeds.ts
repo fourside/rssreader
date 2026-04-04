@@ -36,14 +36,15 @@ feedRoutes.post("/", async (c) => {
   }
 
   const feedId = crypto.randomUUID();
-  const [, selectFeed] = await c.env.DB.batch([
-    c.env.DB.prepare(
-      "INSERT INTO feeds (id, url) VALUES (?, ?) ON CONFLICT (url) DO NOTHING",
-    ).bind(feedId, body.url),
-    c.env.DB.prepare("SELECT id FROM feeds WHERE url = ?").bind(body.url),
-  ]);
+  await c.env.DB.prepare(
+    "INSERT INTO feeds (id, url) VALUES (?, ?) ON CONFLICT (url) DO NOTHING",
+  )
+    .bind(feedId, body.url)
+    .run();
 
-  const feed = (selectFeed as D1Result<{ id: string }>).results[0];
+  const feed = await c.env.DB.prepare("SELECT id FROM feeds WHERE url = ?")
+    .bind(body.url)
+    .first<{ id: string }>();
   if (!feed) {
     return c.json({ error: "Failed to resolve feed" }, 500);
   }

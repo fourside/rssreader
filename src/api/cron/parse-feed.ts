@@ -110,10 +110,14 @@ function extractAtomLink(link: unknown): string {
     );
     return str(alt?.["@_href"] ?? link[0]?.["@_href"]);
   }
-  if (typeof link === "object" && link !== null) {
-    return str((link as XmlNode)["@_href"]);
+  return str(prop(link, "@_href") ?? link);
+}
+
+function prop(obj: unknown, key: string): unknown {
+  if (typeof obj === "object" && obj !== null && key in obj) {
+    return (obj as Record<string, unknown>)[key];
   }
-  return str(link);
+  return undefined;
 }
 
 function str(v: unknown): string {
