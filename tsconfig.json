@@ -16,7 +16,7 @@
 			"@api/*": ["./src/api/*"],
 			"@client/*": ["./src/client/*"]
 		},
-		"types": ["@cloudflare/workers-types", "@cloudflare/vite-plugin/client"]
+		"types": ["@cloudflare/workers-types"]
 	},
 	"include": ["src"]
 }

@@ -23,7 +23,7 @@ export async function verifyPassword(
 
 async function deriveKey(
 	password: string,
-	salt: Uint8Array,
+	salt: Uint8Array<ArrayBuffer>,
 ): Promise<CryptoKey> {
 	const material = await crypto.subtle.importKey(
 		"raw",
@@ -54,7 +54,7 @@ function encode(bytes: Uint8Array): string {
 	return btoa(String.fromCharCode(...bytes));
 }
 
-function decode(str: string): Uint8Array {
+function decode(str: string): Uint8Array<ArrayBuffer> {
 	const binary = atob(str);
 	const bytes = new Uint8Array(binary.length);
 	for (let i = 0; i < binary.length; i++) {
