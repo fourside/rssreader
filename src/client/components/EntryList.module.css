@@ -1,27 +1,27 @@
 .header {
   padding: 12px 16px;
-  border-bottom: 1px solid #e0e0e0;
-  font-size: 14px;
+  border-bottom: 1px solid var(--color-border);
+  font-size: var(--font-base);
   font-weight: 600;
 }
 
 .searchForm {
   padding: 8px 12px;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .searchInput {
   width: 100%;
   padding: 6px 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 13px;
+  border: 1px solid var(--color-border-input);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-md);
 }
 
 .searchInput:focus {
   outline: none;
-  border-color: #4a90d9;
-  box-shadow: 0 0 0 2px rgba(74, 144, 217, 0.2);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-primary-focus);
 }
 
 .list {
@@ -33,23 +33,23 @@
 .item {
   padding: 12px 16px;
   cursor: pointer;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid var(--color-border-light);
 }
 
 .item:hover {
-  background: #f8f8f8;
+  background: var(--color-bg-hover);
 }
 
 .selected {
-  background: #eef3fb;
+  background: var(--color-primary-light);
 }
 
 .selected:hover {
-  background: #eef3fb;
+  background: var(--color-primary-light);
 }
 
 .title {
-  font-size: 14px;
+  font-size: var(--font-base);
   margin: 0 0 4px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -61,19 +61,19 @@
 }
 
 .meta {
-  font-size: 12px;
-  color: #888;
+  font-size: var(--font-sm);
+  color: var(--color-text-secondary);
   display: flex;
-  gap: 8px;
+  gap: var(--space-sm);
 }
 
 .starred {
-  color: #e8a100;
+  color: var(--color-star);
 }
 
 .empty {
   padding: 24px 16px;
   text-align: center;
-  color: #888;
-  font-size: 14px;
+  color: var(--color-text-secondary);
+  font-size: var(--font-base);
 }
