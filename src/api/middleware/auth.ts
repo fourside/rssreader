@@ -2,9 +2,22 @@ import { getCookie } from "hono/cookie";
 import { createMiddleware } from "hono/factory";
 import type { AppEnv } from "../index";
 
-type AuthIdentity = { kind: "user"; userId: string } | { kind: "apiToken" };
+export type AuthIdentity =
+	| { kind: "user"; userId: string }
+	| { kind: "apiToken" };
 
-type AuthEnv = AppEnv & { Variables: { identity: AuthIdentity } };
+export type AuthEnv = AppEnv & { Variables: { identity: AuthIdentity } };
+
+export type UserEnv = AuthEnv & { Variables: { userId: string } };
+
+export const requireUser = createMiddleware<UserEnv>(async (c, next) => {
+	const identity = c.get("identity");
+	if (identity.kind !== "user") {
+		return c.json({ error: "User context required" }, 403);
+	}
+	c.set("userId", identity.userId);
+	return next();
+});
 
 export const auth = createMiddleware<AuthEnv>(async (c, next) => {
 	const authHeader = c.req.header("Authorization");

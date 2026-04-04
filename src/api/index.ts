@@ -1,6 +1,7 @@
 import { Hono } from "hono";
 import { auth } from "./middleware/auth";
 import { authRoutes } from "./routes/auth";
+import { feedRoutes } from "./routes/feeds";
 
 export type Bindings = {
 	DB: D1Database;
@@ -20,6 +21,8 @@ app.get("/api/health", (c) => {
 app.route("/api/auth", authRoutes);
 
 app.use("/api/*", auth);
+
+app.route("/api/feeds", feedRoutes);
 
 export default {
 	fetch: app.fetch,
