@@ -15,16 +15,19 @@ async function getTestPasswordHash(): Promise<string> {
   return cachedHash;
 }
 
-export async function setupTest(): Promise<TestContext> {
-  const db = createTestDb();
-
-  const env: Bindings = {
+export function createTestEnv(db: D1Database): Bindings {
+  return {
     DB: db,
     AI: {} as Bindings["AI"],
     VECTORIZE: {} as Bindings["VECTORIZE"],
     ASSETS: {} as Bindings["ASSETS"],
     API_TOKEN: "test-api-token",
   };
+}
+
+export async function setupTest(): Promise<TestContext> {
+  const db = createTestDb();
+  const env = createTestEnv(db);
 
   const userId = crypto.randomUUID();
   const passwordHash = await getTestPasswordHash();

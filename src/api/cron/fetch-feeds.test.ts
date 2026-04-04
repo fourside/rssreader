@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 import { createTestDb } from "../../test/d1-adapter";
+import { createTestEnv } from "../../test/helpers";
 import type { Bindings } from "../index";
 import { fetchAllFeeds } from "./fetch-feeds";
 
@@ -47,12 +48,7 @@ function insertFeed(
 
 beforeEach(() => {
   db = createTestDb();
-  env = {
-    DB: db,
-    AI: {} as Bindings["AI"],
-    VECTORIZE: {} as Bindings["VECTORIZE"],
-    ASSETS: {} as Bindings["ASSETS"],
-  };
+  env = createTestEnv(db);
 });
 
 afterEach(() => {
