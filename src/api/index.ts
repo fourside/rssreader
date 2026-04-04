@@ -2,6 +2,7 @@ import { Hono } from "hono";
 import { fetchAllFeeds } from "./cron/fetch-feeds";
 import { auth } from "./middleware/auth";
 import { authRoutes } from "./routes/auth";
+import { entryRoutes } from "./routes/entries";
 import { feedRoutes } from "./routes/feeds";
 
 export type Bindings = {
@@ -24,6 +25,7 @@ app.route("/api/auth", authRoutes);
 app.use("/api/*", auth);
 
 app.route("/api/feeds", feedRoutes);
+app.route("/api/entries", entryRoutes);
 
 export default {
   fetch: app.fetch,
