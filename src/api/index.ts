@@ -5,11 +5,11 @@ import { authRoutes } from "./routes/auth";
 import { feedRoutes } from "./routes/feeds";
 
 export type Bindings = {
-	DB: D1Database;
-	AI: Ai;
-	VECTORIZE: VectorizeIndex;
-	ASSETS: Fetcher;
-	API_TOKEN?: string;
+  DB: D1Database;
+  AI: Ai;
+  VECTORIZE: VectorizeIndex;
+  ASSETS: Fetcher;
+  API_TOKEN?: string;
 };
 
 export type AppEnv = { Bindings: Bindings };
@@ -17,7 +17,7 @@ export type AppEnv = { Bindings: Bindings };
 const app = new Hono<AppEnv>();
 
 app.get("/api/health", (c) => {
-	return c.json({ ok: true });
+  return c.json({ ok: true });
 });
 app.route("/api/auth", authRoutes);
 
@@ -26,12 +26,12 @@ app.use("/api/*", auth);
 app.route("/api/feeds", feedRoutes);
 
 export default {
-	fetch: app.fetch,
-	async scheduled(
-		_event: ScheduledEvent,
-		env: Bindings,
-		ctx: ExecutionContext,
-	): Promise<void> {
-		ctx.waitUntil(fetchAllFeeds(env));
-	},
+  fetch: app.fetch,
+  async scheduled(
+    _event: ScheduledEvent,
+    env: Bindings,
+    ctx: ExecutionContext,
+  ): Promise<void> {
+    ctx.waitUntil(fetchAllFeeds(env));
+  },
 };
