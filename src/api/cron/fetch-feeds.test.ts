@@ -101,13 +101,15 @@ describe("fetchAllFeeds", () => {
       etag: '"old-etag"',
       lastModified: "Mon, 01 Jan 2024",
     });
-    const fetchSpy = vi.fn(() => new Response(RSS_XML, { status: 200 }));
+    const fetchSpy = vi.fn<(url: string, init?: RequestInit) => Response>(
+      () => new Response(RSS_XML, { status: 200 }),
+    );
     vi.stubGlobal("fetch", fetchSpy);
 
     await fetchAllFeeds(env);
 
-    const [, init] = fetchSpy.mock.calls[0];
-    expect(init?.headers).toEqual({
+    const call = fetchSpy.mock.calls[0];
+    expect(call?.[1]?.headers).toEqual({
       "If-None-Match": '"old-etag"',
       "If-Modified-Since": "Mon, 01 Jan 2024",
     });

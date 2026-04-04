@@ -49,14 +49,16 @@ function createD1Adapter(db: DatabaseSync): D1Database {
     dump() {
       return Promise.resolve(new ArrayBuffer(0));
     },
-    withSession(_token: string) {
-      return this;
+    withSession() {
+      return this as unknown as D1DatabaseSession;
     },
   };
 }
 
+type SqlValue = string | number | bigint | null | Uint8Array;
+
 function createStatement(db: DatabaseSync, sql: string): D1PreparedStatement {
-  let boundValues: unknown[] = [];
+  let boundValues: SqlValue[] = [];
 
   const exec = (): D1Result => {
     const stmt = db.prepare(sql);
@@ -87,7 +89,7 @@ function createStatement(db: DatabaseSync, sql: string): D1PreparedStatement {
 
   const statement: D1PreparedStatement = {
     bind(...values: unknown[]) {
-      boundValues = values;
+      boundValues = values as SqlValue[];
       return statement;
     },
     first<T = Record<string, unknown>>(colName?: string) {

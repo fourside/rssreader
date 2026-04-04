@@ -1,5 +1,6 @@
 {
   "$schema": "https://unpkg.com/knip@latest/schema.json",
   "entry": ["scripts/*.ts"],
-  "ignoreDependencies": ["@vitest/coverage-v8"]
+  "ignoreDependencies": ["@vitest/coverage-v8"],
+  "ignore": ["public/sw.js", "src/client/env.d.ts"]
 }
