@@ -5,7 +5,7 @@ type Props = {
   entries: EntryItem[];
   selectedEntryId: string | null;
   onSelectEntry: (entryId: string) => void;
-  feedTitle?: string;
+  feedTitle?: string | undefined;
 };
 
 export function EntryList({

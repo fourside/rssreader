@@ -44,6 +44,9 @@ feedRoutes.post("/", async (c) => {
   ]);
 
   const feed = (selectFeed as D1Result<{ id: string }>).results[0];
+  if (!feed) {
+    return c.json({ error: "Failed to resolve feed" }, 500);
+  }
   const actualFeedId = feed.id;
 
   const subResult = await c.env.DB.prepare(

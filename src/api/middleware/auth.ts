@@ -51,8 +51,8 @@ function timingSafeEqual(a: string, b: string): boolean {
   const encB = new TextEncoder().encode(b);
   if (encA.byteLength !== encB.byteLength) return false;
   let result = 0;
-  for (let i = 0; i < encA.length; i++) {
-    result |= encA[i] ^ encB[i];
+  for (const [i, byte] of encA.entries()) {
+    result |= byte ^ (encB[i] ?? 0);
   }
   return result === 0;
 }
