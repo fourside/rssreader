@@ -41,10 +41,15 @@
 }
 
 .selected {
+  background: var(--color-border-light);
+}
+
+.selectedFocused {
   background: var(--color-primary-light);
 }
 
-.selected:hover {
+.selected:hover,
+.selectedFocused:hover {
   background: var(--color-primary-light);
 }
 

@@ -45,6 +45,14 @@
   background: var(--color-bg-hover);
 }
 
+.focused {
+  box-shadow: inset 3px 0 0 var(--color-primary);
+}
+
+.unfocused {
+  background-color: var(--color-bg-muted);
+}
+
 .backButton {
   display: none;
 }

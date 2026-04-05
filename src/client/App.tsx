@@ -163,11 +163,13 @@ export function App() {
   return (
     <Layout
       activePane={activePane}
+      focusPane={focusPane}
       onBack={handleBack}
       feedList={
         <FeedList
           feeds={feeds}
           selectedFeedId={selectedFeedId}
+          focused={focusPane === "feeds"}
           onSelectFeed={(id) => {
             setSelectedFeedId(id);
             setSearchQuery("");
@@ -180,6 +182,7 @@ export function App() {
         <EntryList
           entries={entries}
           selectedEntryId={selectedEntryId}
+          focused={focusPane === "entries"}
           onSelectEntry={handleSelectEntry}
           feedTitle={
             searchQuery

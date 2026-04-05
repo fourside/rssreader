@@ -5,6 +5,7 @@ import styles from "./FeedList.module.css";
 type Props = {
   feeds: Feed[];
   selectedFeedId: string | null;
+  focused: boolean;
   onSelectFeed: (feedId: string | null) => void;
   onAddFeed: (url: string, category: string) => Promise<boolean>;
   onDeleteFeed: (feedId: string) => void;
@@ -13,10 +14,14 @@ type Props = {
 export function FeedList({
   feeds,
   selectedFeedId,
+  focused,
   onSelectFeed,
   onAddFeed,
   onDeleteFeed,
 }: Props) {
+  const selectedClass = focused
+    ? (styles.selectedFocused ?? "")
+    : (styles.selected ?? "");
   const [showForm, setShowForm] = useState(false);
 
   const grouped = new Map<string, Feed[]>();
@@ -54,7 +59,7 @@ export function FeedList({
       )}
       <ul className={styles.list}>
         <li
-          className={`${styles.allItem} ${selectedFeedId === null ? styles.selected : ""}`}
+          className={`${styles.allItem} ${selectedFeedId === null ? selectedClass : ""}`}
           onClick={() => onSelectFeed(null)}
           onKeyDown={() => {}}
         >
@@ -69,6 +74,7 @@ export function FeedList({
                   key={feed.id}
                   feed={feed}
                   selected={feed.id === selectedFeedId}
+                  selectedClass={selectedClass}
                   onSelect={() => onSelectFeed(feed.id)}
                   onDelete={() => onDeleteFeed(feed.id)}
                 />
@@ -81,6 +87,7 @@ export function FeedList({
             key={feed.id}
             feed={feed}
             selected={feed.id === selectedFeedId}
+            selectedClass={selectedClass}
             onSelect={() => onSelectFeed(feed.id)}
             onDelete={() => onDeleteFeed(feed.id)}
           />
@@ -145,17 +152,19 @@ function AddFeedForm({
 function FeedItem({
   feed,
   selected,
+  selectedClass,
   onSelect,
   onDelete,
 }: {
   feed: Feed;
   selected: boolean;
+  selectedClass: string;
   onSelect: () => void;
   onDelete: () => void;
 }) {
   return (
     <li
-      className={`${styles.item} ${selected ? styles.selected : ""}`}
+      className={`${styles.item} ${selected ? selectedClass : ""}`}
       onClick={onSelect}
       onKeyDown={() => {}}
     >

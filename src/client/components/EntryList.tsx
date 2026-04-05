@@ -5,6 +5,7 @@ import styles from "./EntryList.module.css";
 type Props = {
   entries: EntryItem[];
   selectedEntryId: string | null;
+  focused: boolean;
   onSelectEntry: (entryId: string) => void;
   feedTitle?: string | undefined;
   searchQuery: string;
@@ -14,11 +15,15 @@ type Props = {
 export function EntryList({
   entries,
   selectedEntryId,
+  focused,
   onSelectEntry,
   feedTitle,
   searchQuery,
   onSearch,
 }: Props) {
+  const selectedClass = focused
+    ? (styles.selectedFocused ?? "")
+    : (styles.selected ?? "");
   const [input, setInput] = useState(searchQuery);
 
   useEffect(() => {
@@ -51,7 +56,7 @@ export function EntryList({
               key={entry.id}
               className={[
                 styles.item,
-                entry.id === selectedEntryId ? styles.selected : "",
+                entry.id === selectedEntryId ? selectedClass : "",
                 !entry.is_read ? styles.unread : "",
               ]
                 .filter(Boolean)

@@ -127,11 +127,17 @@
 }
 
 .selected {
+  background: var(--color-border-light);
+  font-weight: 600;
+}
+
+.selectedFocused {
   background: var(--color-bg-selected);
   font-weight: 600;
 }
 
-.selected:hover {
+.selected:hover,
+.selectedFocused:hover {
   background: var(--color-bg-selected);
 }
 
