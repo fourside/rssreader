@@ -34,11 +34,12 @@ authRoutes.post("/login", async (c) => {
 
   const token = crypto.randomUUID();
   const expiresAt = new Date(Date.now() + SESSION_MAX_AGE * 1000).toISOString();
-  await c.env.DB.prepare(
-    "INSERT INTO sessions (token, user_id, expires_at) VALUES (?, ?, ?)",
-  )
-    .bind(token, user.id, expiresAt)
-    .run();
+  await c.env.DB.batch([
+    c.env.DB.prepare(
+      "INSERT INTO sessions (token, user_id, expires_at) VALUES (?, ?, ?)",
+    ).bind(token, user.id, expiresAt),
+    c.env.DB.prepare("DELETE FROM sessions WHERE expires_at < datetime('now')"),
+  ]);
 
   setCookie(c, "session", token, {
     httpOnly: true,
