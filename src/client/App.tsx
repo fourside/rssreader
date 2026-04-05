@@ -80,6 +80,30 @@ export function App() {
     );
   }
 
+  async function handleAddFeed(
+    url: string,
+    category: string,
+  ): Promise<boolean> {
+    const result = await api.addFeed(url, category || undefined);
+    if (result.ok) {
+      const feedsResult = await api.getFeeds();
+      if (feedsResult.ok) setFeeds(feedsResult.data.feeds);
+      return true;
+    }
+    return false;
+  }
+
+  async function handleDeleteFeed(feedId: string) {
+    if (!window.confirm("Unsubscribe from this feed?")) return;
+    const result = await api.deleteFeed(feedId);
+    if (result.ok) {
+      setFeeds((prev) => prev.filter((f) => f.id !== feedId));
+      if (selectedFeedId === feedId) {
+        setSelectedFeedId(null);
+      }
+    }
+  }
+
   async function handleLogout() {
     await api.logout();
     setAuthState("unauthenticated");
@@ -108,6 +132,8 @@ export function App() {
             setSelectedFeedId(id);
             setSearchQuery("");
           }}
+          onAddFeed={handleAddFeed}
+          onDeleteFeed={handleDeleteFeed}
         />
       }
       entryList={

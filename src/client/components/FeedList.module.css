@@ -1,3 +1,109 @@
+.addButton {
+  display: block;
+  width: calc(100% - 24px);
+  margin: var(--space-md);
+  padding: var(--space-sm);
+  border: 1px dashed var(--color-border-input);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-text-secondary);
+  font-size: var(--font-md);
+  cursor: pointer;
+  text-align: center;
+}
+
+.addButton:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.addForm {
+  display: grid;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.addInput {
+  width: 100%;
+  padding: 6px 10px;
+  border: 1px solid var(--color-border-input);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-md);
+}
+
+.addInput:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-primary-focus);
+}
+
+.addActions {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--space-sm);
+}
+
+.addSubmit {
+  padding: 6px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--color-primary);
+  color: var(--color-bg);
+  font-size: var(--font-md);
+  cursor: pointer;
+}
+
+.addSubmit:hover {
+  background: var(--color-primary-hover);
+}
+
+.addSubmit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.addCancel {
+  padding: 6px var(--space-md);
+  border: 1px solid var(--color-border-input);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  font-size: var(--font-md);
+  cursor: pointer;
+}
+
+.addCancel:hover {
+  background: var(--color-bg-hover);
+}
+
+.error {
+  margin: 0;
+  padding: var(--space-sm);
+  color: var(--color-error);
+  background: var(--color-error-bg);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-sm);
+}
+
+.deleteButton {
+  padding: 0 var(--space-xs);
+  border: none;
+  background: transparent;
+  color: var(--color-text-secondary);
+  font-size: var(--font-base);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.item:hover .deleteButton {
+  opacity: 1;
+}
+
+.deleteButton:hover {
+  color: var(--color-error);
+}
+
 .list {
   list-style: none;
   margin: 0;
