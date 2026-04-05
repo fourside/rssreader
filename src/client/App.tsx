@@ -121,9 +121,26 @@ export function App() {
   }
 
   const selectedFeed = feeds.find((f) => f.id === selectedFeedId);
+  const activePane = selectedEntryId
+    ? "entry"
+    : selectedFeedId !== null || searchQuery
+      ? "entries"
+      : "feeds";
+
+  function handleBack() {
+    if (activePane === "entry") {
+      setSelectedEntryId(null);
+      setEntryDetail(null);
+    } else {
+      setSelectedFeedId(null);
+      setSearchQuery("");
+    }
+  }
 
   return (
     <Layout
+      activePane={activePane}
+      onBack={handleBack}
       feedList={
         <FeedList
           feeds={feeds}

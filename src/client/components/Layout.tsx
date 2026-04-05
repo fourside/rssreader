@@ -1,17 +1,30 @@
 import type { ReactNode } from "react";
 import styles from "./Layout.module.css";
 
+type Pane = "feeds" | "entries" | "entry";
+
 type Props = {
   feedList: ReactNode;
   entryList: ReactNode;
   entryView: ReactNode;
+  activePane: Pane;
+  onBack: () => void;
   onLogout: () => void;
 };
 
-export function Layout({ feedList, entryList, entryView, onLogout }: Props) {
+export function Layout({
+  feedList,
+  entryList,
+  entryView,
+  activePane,
+  onBack,
+  onLogout,
+}: Props) {
   return (
     <div className={styles.layout}>
-      <div className={styles.feedList}>
+      <div
+        className={`${styles.feedList} ${activePane === "feeds" ? styles.mobileActive : ""}`}
+      >
         <div className={styles.header}>
           <span>Feeds</span>
           <button
@@ -24,8 +37,22 @@ export function Layout({ feedList, entryList, entryView, onLogout }: Props) {
         </div>
         {feedList}
       </div>
-      <div className={styles.entryList}>{entryList}</div>
-      <div className={styles.entryView}>{entryView}</div>
+      <div
+        className={`${styles.entryList} ${activePane === "entries" ? styles.mobileActive : ""}`}
+      >
+        <button type="button" className={styles.backButton} onClick={onBack}>
+          &larr; Feeds
+        </button>
+        {entryList}
+      </div>
+      <div
+        className={`${styles.entryView} ${activePane === "entry" ? styles.mobileActive : ""}`}
+      >
+        <button type="button" className={styles.backButton} onClick={onBack}>
+          &larr; Entries
+        </button>
+        {entryView}
+      </div>
     </div>
   );
 }

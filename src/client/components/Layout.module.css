@@ -44,3 +44,44 @@
 .logoutButton:hover {
   background: var(--color-bg-hover);
 }
+
+.backButton {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .feedList,
+  .entryList,
+  .entryView {
+    display: none;
+    border-right: none;
+  }
+
+  .mobileActive {
+    display: block;
+  }
+
+  .entryList {
+    min-width: 0;
+  }
+
+  .backButton {
+    display: block;
+    width: 100%;
+    padding: 10px 16px;
+    border: none;
+    border-bottom: 1px solid var(--color-border);
+    background: var(--color-bg-subtle);
+    font-size: var(--font-base);
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .backButton:hover {
+    background: var(--color-bg-hover);
+  }
+}
