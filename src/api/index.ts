@@ -1,4 +1,5 @@
 import { Hono } from "hono";
+import { embedNewEntries } from "./cron/embed-entries";
 import { fetchAllFeeds } from "./cron/fetch-feeds";
 import { auth } from "./middleware/auth";
 import { aiRoutes } from "./routes/ai";
@@ -38,6 +39,6 @@ export default {
     env: Bindings,
     ctx: ExecutionContext,
   ): Promise<void> {
-    ctx.waitUntil(fetchAllFeeds(env));
+    ctx.waitUntil(fetchAllFeeds(env).then(() => embedNewEntries(env)));
   },
 };

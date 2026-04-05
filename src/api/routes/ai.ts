@@ -1,10 +1,8 @@
 import type { Context } from "hono";
 import { Hono } from "hono";
+import { runTextModel } from "../ai-model";
 import type { UserEnv } from "../middleware/auth";
 import { requireUser } from "../middleware/auth";
-
-// Model not in @cloudflare/workers-types yet, but available at runtime
-const TEXT_MODEL = "@cf/meta/llama-3.1-8b-instruct" as Parameters<Ai["run"]>[0];
 
 export const aiRoutes = new Hono<UserEnv>();
 
@@ -21,11 +19,14 @@ aiRoutes.post("/:id/summarize", async (c) => {
   const source = entry.content ?? entry.summary ?? "";
   if (!source) return c.json({ error: "No content to summarize" }, 400);
 
-  const aiSummary = await runAi(
-    c,
-    "You are a helpful assistant. Summarize the following article in Japanese in 2-3 sentences. Be concise.",
-    source,
-  );
+  const aiSummary = await runTextModel(c.env.AI, [
+    {
+      role: "system",
+      content:
+        "You are a helpful assistant. Summarize the following article in Japanese in 2-3 sentences. Be concise.",
+    },
+    { role: "user", content: source.slice(0, 4000) },
+  ]);
 
   if (aiSummary) {
     await c.env.DB.prepare("UPDATE entries SET ai_summary = ? WHERE id = ?")
@@ -55,11 +56,13 @@ aiRoutes.post("/:id/translate", async (c) => {
   const source = entry.content ?? entry.summary ?? "";
   if (!source) return c.json({ error: "No content to translate" }, 400);
 
-  const translation = await runAi(
-    c,
-    `You are a translator. Translate the following text to ${lang}. Output only the translation, no explanation.`,
-    source,
-  );
+  const translation = await runTextModel(c.env.AI, [
+    {
+      role: "system",
+      content: `You are a translator. Translate the following text to ${lang}. Output only the translation, no explanation.`,
+    },
+    { role: "user", content: source.slice(0, 4000) },
+  ]);
 
   if (translation) {
     await c.env.DB.prepare(
@@ -95,22 +98,4 @@ async function getSubscribedEntry(
   )
     .bind(userId, entryId)
     .first<EntryRow>();
-}
-
-async function runAi(
-  c: Context<UserEnv>,
-  systemPrompt: string,
-  content: string,
-): Promise<string> {
-  const result = await c.env.AI.run(TEXT_MODEL, {
-    messages: [
-      { role: "system", content: systemPrompt },
-      { role: "user", content: content.slice(0, 4000) },
-    ],
-  });
-
-  if (typeof result === "object" && result !== null && "response" in result) {
-    return String(result.response);
-  }
-  return "";
 }
