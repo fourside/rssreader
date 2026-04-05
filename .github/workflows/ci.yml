@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+
+      - uses: actions/cache@v4
+        id: npm-cache
+        with:
+          path: node_modules
+          key: npm-${{ hashFiles('package-lock.json') }}
+
+      - if: steps.npm-cache.outputs.cache-hit != 'true'
+        run: npm ci
+
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run knip
+      - run: npm run test
+      - run: npm run build
