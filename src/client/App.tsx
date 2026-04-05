@@ -4,7 +4,9 @@ import { EntryList } from "./components/EntryList";
 import { EntryView } from "./components/EntryView";
 import { FeedList } from "./components/FeedList";
 import { Layout } from "./components/Layout";
+import { useKeyboardNav } from "./hooks/useKeyboardNav";
 import { LoginPage } from "./pages/LoginPage";
+import type { Pane } from "./types";
 
 type AuthState = "loading" | "unauthenticated" | "authenticated";
 
@@ -16,6 +18,7 @@ export function App() {
   const [selectedEntryId, setSelectedEntryId] = useState<string | null>(null);
   const [entryDetail, setEntryDetail] = useState<EntryDetail | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [focusPane, setFocusPane] = useState<Pane>("feeds");
 
   useEffect(() => {
     api.getFeeds().then((result) => {
@@ -30,6 +33,25 @@ export function App() {
     );
     if (result.ok) setEntries(result.data.entries);
   }, []);
+
+  useKeyboardNav({
+    activePane: focusPane,
+    feeds,
+    entries,
+    selectedFeedId,
+    selectedEntryId,
+    entryUrl: entryDetail?.url ?? null,
+    onSelectFeed: (id) => {
+      setSelectedFeedId(id);
+      setSearchQuery("");
+      setFocusPane("entries");
+    },
+    onSelectEntry: (id) => {
+      handleSelectEntry(id);
+    },
+    onToggleStar: () => handleToggleField("is_starred"),
+    onFocusPane: setFocusPane,
+  });
 
   useEffect(() => {
     if (authState !== "authenticated") return;
@@ -55,6 +77,7 @@ export function App() {
 
   async function handleSelectEntry(entryId: string) {
     setSelectedEntryId(entryId);
+    setFocusPane("entry");
     const result = await api.getEntry(entryId);
     if (result.ok) {
       setEntryDetail(result.data.entry);

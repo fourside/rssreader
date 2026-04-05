@@ -1,7 +1,6 @@
 import type { ReactNode } from "react";
+import type { Pane } from "../types";
 import styles from "./Layout.module.css";
-
-type Pane = "feeds" | "entries" | "entry";
 
 type Props = {
   feedList: ReactNode;
